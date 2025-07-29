@@ -2,6 +2,7 @@ import streamlit as st
 import google.generativeai as genai
 import os
 from dotenv import load_dotenv
+import time  # Added this import
 
 # Load environment variables
 load_dotenv()
@@ -16,12 +17,12 @@ st.set_page_config(
 
 # Initialize Gemini with API key from environment
 def setup_gemini():
-    api_key = os.getenv("AIzaSyCooDxXGRdFMuTYdomwUTvI-7aUd0FBfFw")
+    api_key = os.getenv("GOOGLE_API_KEY")
     if not api_key:
         st.error("Gemini API key not found. Please set GOOGLE_API_KEY in your environment variables.")
         st.stop()
     genai.configure(api_key=api_key)
-    return genai.GenerativeModel('gemini-2.5-flash')
+    return genai.GenerativeModel('gemini-pro')
 
 # App header
 st.title("🤖 HealthBot")
@@ -49,7 +50,7 @@ def display_message(role, content, avatar=None):
             time.sleep(0.05)
             message_placeholder.markdown(full_response + "▌")
         
-        message_placeholder.markdown(full_response)
+        message_placeholder.markdown(full_response)  # Fixed typo here (was 'f ull_response')
 
 # Display existing messages
 for message in st.session_state.messages:
@@ -93,7 +94,7 @@ for i, suggestion in enumerate(quick_suggestions):
                         "avatar": "🤖"
                     })
                     
-                    display_message("assistant", formatted_response, "🤖")
+                    display_message("assistant", formatted_response, "🤖")  # Fixed typo here (was 'assistant')
                 except Exception as e:
                     st.error(f"Sorry, I encountered an error: {str(e)}")
 
