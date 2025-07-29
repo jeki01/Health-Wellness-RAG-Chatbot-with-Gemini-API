@@ -17,7 +17,7 @@ st.set_page_config(
 
 # Initialize Gemini with API key from environment
 def setup_gemini():
-    api_key = os.getenv("AIzaSyCooDxXGRdFMuTYdomwUTvI-7aUd0FBfFw)
+    api_key = os.getenv("AIzaSyCooDxXGRdFMuTYdomwUTvI-7aUd0FBfFw")
     if not api_key:
         st.error("AIzaSyCooDxXGRdFMuTYdomwUTvI-7aUd0FBfFw")
         st.stop()
