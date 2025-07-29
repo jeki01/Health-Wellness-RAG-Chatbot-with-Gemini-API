@@ -22,7 +22,7 @@ def setup_gemini():
         st.error("Gemini API key not found. Please set GOOGLE_API_KEY in your environment variables.")
         st.stop()
     genai.configure(api_key=api_key)
-    return genai.GenerativeModel('gemini-pro')
+    return genai.GenerativeModel('gemini-2.5-flash')
 
 # App header
 st.title("🤖 HealthBot")
