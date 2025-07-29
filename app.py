@@ -2,7 +2,7 @@ import streamlit as st
 import google.generativeai as genai
 import os
 from dotenv import load_dotenv
-import time  # Added this import
+import time
 
 # Load environment variables
 load_dotenv()
@@ -19,10 +19,10 @@ st.set_page_config(
 def setup_gemini():
     api_key = os.getenv("AIzaSyCooDxXGRdFMuTYdomwUTvI-7aUd0FBfFw")
     if not api_key:
-        st.error("AIzaSyCooDxXGRdFMuTYdomwUTvI-7aUd0FBfFw")
+        st.error("Gemini API key not found. Please set GOOGLE_API_KEY in your environment variables.")
         st.stop()
     genai.configure(api_key=api_key)
-    return genai.GenerativeModel('gemini-2.5-flash')
+    return genai.GenerativeModel('AIzaSyCooDxXGRdFMuTYdomwUTvI-7aUd0FBfFw')
 
 # App header
 st.title("🤖 HealthBot")
@@ -50,7 +50,7 @@ def display_message(role, content, avatar=None):
             time.sleep(0.05)
             message_placeholder.markdown(full_response + "▌")
         
-        message_placeholder.markdown(full_response)  # Fixed typo here (was 'f ull_response')
+        message_placeholder.markdown(full_response)
 
 # Display existing messages
 for message in st.session_state.messages:
@@ -68,11 +68,10 @@ quick_suggestions = [
 st.write("**Quick suggestions:**")
 cols = st.columns(5)
 for i, suggestion in enumerate(quick_suggestions):
-    with cols[i]:
+    with cols[i % 5]:  # Ensure we stay within column bounds
         if st.button(suggestion):
             st.session_state.messages.append({"role": "user", "content": suggestion, "avatar": "👤"})
-            with st.chat_message("user", avatar="👤"):
-                st.markdown(suggestion)
+            display_message("user", suggestion, "👤")
             
             with st.spinner("HealthBot is thinking..."):
                 try:
@@ -94,7 +93,7 @@ for i, suggestion in enumerate(quick_suggestions):
                         "avatar": "🤖"
                     })
                     
-                    display_message("assistant", formatted_response, "🤖")  # Fixed typo here (was 'assistant')
+                    display_message("assistant", formatted_response, "🤖")
                 except Exception as e:
                     st.error(f"Sorry, I encountered an error: {str(e)}")
 
@@ -145,6 +144,9 @@ st.markdown("""
         margin-bottom: 12px;
         max-width: 85%;
     }
+    .stChatMessage p {
+        margin-bottom: 4px;
+    }
     [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] {
         font-size: 0.95rem;
     }
@@ -156,6 +158,10 @@ st.markdown("""
         padding: 6px 12px;
         margin: 2px 0;
         width: 100%;
+        font-size: 0.8rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .stButton button:hover {
         background: #f0fff0;
